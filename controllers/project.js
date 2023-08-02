@@ -53,19 +53,32 @@ var controller = {
                 res.status(500).send({message: 'Error al guardar el documento'});
             })
 
+    }, 
+
+    getProject: function(req,res){
+        var projectId = req.params.id;
+
+        if(projectId == null) return res.status(404).send({message: "El proyecto no existe"});
+        
+
+        //Refiere que hay muchos métodos de este tipo y se podrían buscar en la documentación de Moongose
+        Project.findById(projectId, (err, project) => {
+            
+            if(err) return res.status(500).send({message: "Error al devolver los datos."});
+
+            if(!project) return res.status(404).send({message: "El proyecto no existe"});
+
+            return res.status(200).send({
+                project
+            })
+
+        });
+
     }
 
     
 
 
 };
-
-function saveBDProyect (err, projectStore){
-    if(err) return res.status(500).send({message: 'Error al guardar el documento'});
-
-    if(!projectStore) return res.status(404).send({message: 'No se ha podido guardar el proyecto'});
-       
-    return res.status(200).send({project: projectStore});
-}
 
 module.exports = controller;

@@ -2,14 +2,14 @@
 'use strict'
 
 var express = require('express');
-var ProyectController = require('../controllers/project');
+var ProjectController = require('../controllers/project');
 
 var router = express.Router();
 
-router.get('/home',ProyectController.home);
-router.post('/test',ProyectController.test);
-router.post('/save-project',ProyectController.saveProject); //http://localhost:3700/api/save-project //Body - x-www-form-urlencoded
-
+router.get('/home',ProjectController.home);
+router.post('/test',ProjectController.test);
+router.post('/save-project',ProjectController.saveProject); //http://localhost:3700/api/save-project //Body - x-www-form-urlencoded
+router.get('/project/:Id?', ProjectController.getProject) //opcional params 
 
 module.exports = router;
 //obs a
