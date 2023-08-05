@@ -44,18 +44,57 @@ var controller = {
     }, 
 
     getProject: async function(req,res){
-
         var projectId = req.params.id;
-
         if(projectId == null) return res.status(404).send({message: "Debe ingresar código del proyecto"});
         
         try{
-            var project = await Project.findById(projectId)        
+            var project = await Project.findById(projectId);
             res.status(200).send({project:project});
         }catch (err) {
-            res.status(500).send({message: "No se encuentra proyecto"});
+            res.status(500).send({message: "No se encontró proyecto"});
         }
+    },
+
+    getProjects: async function(req, res){
+        try{
+            //var projects = await Project.find({"category":"Desarrollo Web"}).exec(); //Opción con filtros
+            //var projects = await Project.find({}).sort('year').exec(); //Opcion para ordenar por año
+            var projects = await Project.find({}).sort('-year').exec(); //Opcion para ordenar por año de mayor a menor
+            //var projects = await Project.find({}).exec();
+            res.status(200).send({projecs:projects});
+        }catch(err) {
+            res.status(500).send({message: "No se encontró proyecto"});
+        }
+    },
+
+    updateProject: async function (req,res){
         
+        try{
+            var projectId = req.params.id;
+            var update = req.body;
+            
+            //En la documentacion de Mongoose están especificados todos los métodos que existen
+            var ProjectUpdated =  await Project.findByIdAndUpdate(projectId,update, {new:true}); //Con el tercer parámetro devuelve el nuevo objeto
+            
+            res.status(200).send({project: ProjectUpdated});
+
+        }catch(err){
+            res.status(500).send({message: "No se actualizó el proyecto"});
+        }
+    },
+
+    deleteProject: async function (req,res){
+        try{
+            var projectId = req.params.id;
+
+            await Project.findByIdAndDelete(projectId).exec();
+            
+            res.status(200).send({message: "El proyecto se elimino correctamente"});
+
+        
+        } catch(err) {
+            res.status(500).send({message: "No se eliminó el proyecto"});
+        }
     }
 
 };
