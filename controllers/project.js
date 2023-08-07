@@ -5,6 +5,7 @@ const proyect = require('../models/proyect');
 //const proyect = require('../models/proyect'); /*** */
 var Project = require('../models/proyect'); //Tengo disponible mi modelo
 //const { param } = require('../routes/project'); /*** */
+var fs = require('fs');
 
 var controller = {
 
@@ -94,6 +95,47 @@ var controller = {
         
         } catch(err) {
             res.status(500).send({message: "No se eliminó el proyecto"});
+        }
+    },
+
+    //La subida de archivos se trabajará con al librería: connect-multiparty
+
+    uploadImage: async function (req, res){
+        var projectId = req.params.id;
+        var fileName = 'Imagen no subida ...';
+        
+        if(req.files){
+            var filePath = req.files.image.path;
+            var fileSplit = filePath.split('\\');
+            var fileName = fileSplit[1];
+            var extSplit = fileName.split('\.');
+            var fileExt = extSplit[1];
+
+            if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
+
+                try{
+                    var projectUpdated = await Project.findByIdAndUpdate(projectId, {image:fileName},{new:true});
+
+                    res.status(200).send({
+                        //files: req.files
+                        //files:fileName
+                        project: projectUpdated
+                    });
+
+                }catch(err){
+                    res.status(500).send({message: "No se actualizó la imagen"});
+                }
+            } else {
+                fs.unlink(filePath, (err) => {
+                    return res.status(200).send({message: "La extensión no es valida"});
+                });
+            }
+
+        }else{
+            console.log('entra');
+            return res.status(200).send({
+                files: fileName
+            });
         }
     }
 
