@@ -62,7 +62,7 @@ var controller = {
             //var projects = await Project.find({}).sort('year').exec(); //Opcion para ordenar por año
             var projects = await Project.find({}).sort('-year').exec(); //Opcion para ordenar por año de mayor a menor
             //var projects = await Project.find({}).exec();
-            res.status(200).send({projecs:projects});
+            res.status(200).send({projects:projects});
         }catch(err) {
             res.status(500).send({message: "No se encontró proyecto"});
         }
