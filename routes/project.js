@@ -16,6 +16,7 @@ router.get('/projects',ProjectController.getProjects);
 router.put('/update-project/:id?',ProjectController.updateProject);
 router.delete('/delete-project/:id?',ProjectController.deleteProject);
 router.post('/upload-image/:id',multipartMiddleware, ProjectController.uploadImage); //Con este parámetro adicional se ejecutará el middelware 
+router.get('/get-image/:image', ProjectController.getImageFile);
 
 module.exports = router;
 //obs a

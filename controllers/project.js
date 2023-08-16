@@ -1,11 +1,14 @@
 //Un controlador es una clase que va a tener una serie de métodos y acciones que van a estar relacionados con un modelo de datos específico 
 'use strict'
 
+const { exit } = require('process');
 const proyect = require('../models/proyect');
 //const proyect = require('../models/proyect'); /*** */
 var Project = require('../models/proyect'); //Tengo disponible mi modelo
 //const { param } = require('../routes/project'); /*** */
 var fs = require('fs');
+var path = require('path'); //path es un módulo del NodeJs que nos permite cargar rutas fìsicas en 
+                            //nuestro sistema de archivo
 
 var controller = {
 
@@ -137,6 +140,21 @@ var controller = {
                 files: fileName
             });
         }
+    },
+
+    getImageFile: function (req, res){
+        var file = req.params.image;
+        var path_file = './uploads/' + file;
+        
+        fs.exists(path_file, (exists) => {
+            if(exists){
+                return res.sendFile(path.resolve(path_file))
+            }else{
+                return res.status(200).send({
+                    message: "No existe la imagen..."
+                });
+            }
+        });
     }
 
 };
